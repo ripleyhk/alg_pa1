@@ -140,7 +140,7 @@ class Turing:
         if (self.curr_state.state_type == ACCEPT):
             return self.tape
         else:
-            return "REJECTED"
+            return "REJECT"
         
     def print_debug(self):
         print("Tape= {0}".format(self.tape))
@@ -218,6 +218,5 @@ def turing_driver(input):
     turing.add_states_from_list(states)
     turing.add_rules_from_list(rules)
     result = turing.run()
-    print("Result= {0}".format(result))
-
-turing_driver("111#11")
+    #print("Result= {0}".format(result))
+    return result
