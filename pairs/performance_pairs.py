@@ -14,20 +14,22 @@ import random
 # @params n
 def closest_pairs_brute_n(n):
     data_set = generate_random_points_list(n)
-    result = closest_pairs_brute_driver(data_set, "{0}_pairs.txt".format(n))
-    operations = result.operations
+    closest_pairs_brute_driver(data_set, "{0}_pairs.txt".format(n))
+    analysis = get_analysis()
+    operations = analysis.operations
     print("For Data Set of size {0}, # of Operations= {1}".format(n, operations))
-
+    analysis.reset()
 # 
 # Get the number of operations for running the recursive closest pairs algorithm
 # on a data set of n random Points where 0 <= x, y <= 100
 # @params n
 def closest_pairs_recursive_n(n):
     data_set = generate_random_points_list(n)
-    result = closest_pairs_recursive_driver(data_set, "{0}_pairs.txt".format(n))
-    operations = result.operations
+    closest_pairs_recursive_driver(data_set, "{0}_pairs.txt".format(n))
+    analysis = get_analysis()
+    operations = analysis.operations
     print("For Data Set of size {0}, # of Operations= {1}".format(n, operations))
-
+    analysis.reset()
 
 if __name__ == "__main__":
     # sizes = [10, 29, 30, 31, 100, 1000, 5000]

@@ -62,7 +62,7 @@ class IntegrationTests(unittest.TestCase):
         test_data = generate_closest_pairs_list(20)
         points = test_data.points
         expected = test_data.pairs
-        actual = closest_pairs_brute_driver(points).result
+        actual = closest_pairs_brute_driver(points)
         self.assertEqual(len(actual), len(expected))
         for pair in actual:
             if (not(pair in expected)):
@@ -73,7 +73,7 @@ class IntegrationTests(unittest.TestCase):
         test_data = generate_closest_pairs_list(40)
         points = test_data.points
         expected = test_data.pairs
-        actual = closest_pairs_brute_driver(points, "brute_medium.txt").result
+        actual = closest_pairs_brute_driver(points, "brute_medium.txt")
         clean_artifact("brute_medium.txt")
         self.assertEqual(len(actual), len(expected))
         for pair in actual:
@@ -85,7 +85,7 @@ class IntegrationTests(unittest.TestCase):
         test_data = generate_closest_pairs_list(20)
         points = test_data.points
         expected = test_data.pairs
-        actual = closest_pairs_recursive_driver(points).result
+        actual = closest_pairs_recursive_driver(points)
         self.assertEqual(len(actual), len(expected))
         for pair in actual:
             if (not(pair in expected)):
@@ -96,7 +96,7 @@ class IntegrationTests(unittest.TestCase):
         test_data = generate_closest_pairs_list(40)
         points = test_data.points
         expected = test_data.pairs
-        actual = closest_pairs_recursive_driver(points, "recursive_medium.txt").result
+        actual = closest_pairs_recursive_driver(points, "recursive_medium.txt")
         clean_artifact("recursive_medium.txt")
         self.assertEqual(len(actual), len(expected))
         for pair in actual:
