@@ -6,6 +6,33 @@
 # Description: 
 '''
 
+'''
+# The following structure is used to hold both the result and operation count for a particular
+# execution of a function, for use in complexity analysis
+#
+# This functionality is not being evaluated for running time complexity
+'''
+class Analysis:
+    def __init__ (self, result=None, operations=0, space=0):
+        self.result = result
+        self.operations = operations
+        self.space = space
+
+    def reset(self):
+        self.result = None
+        self.operations = 0
+
+    def __str__(self):
+        return "{0}\nTotal Operations={1}".format(result, operations)
+
+    def __repr__(self):
+        return "{0}\nTotal Operations={1}".format(result, operations)
+
+analysis = Analysis()
+def get_analysis():
+    return analysis
+        
+
 # state types
 NORMAL = "normal"
 START = "start"
@@ -56,10 +83,17 @@ class Rule:
             self.direction, self.next_state, self.symbol)
 
 '''
+# 
 # The following structure is used to represent a Turing Machine
 #
 '''
 class Turing:
+    '''
+    # A Turing Machine Constructor
+    # @params tape a list of character strings for processing
+    # @params head_index the starting index of the turing head
+    # @states an optional dictionary of state names and objects
+    '''
     def __init__ (self, tape=[], head_index=0, states = {}):
         self.tape = tape
         self.head_index = head_index
@@ -91,7 +125,6 @@ class Turing:
             self.tape.insert(0, '#')
             self.head_index = 0
 
-
     def is_halted(self):
         return (self.curr_state.state_type == ACCEPT 
              or self.curr_state.state_type == REJECT)
@@ -100,6 +133,7 @@ class Turing:
         state = State(name, state_type, rules)
         self.states[name] = state
 
+    # Add a list of states, optionally also their types and transition rules
     def add_states_from_list(self, names, state_types=None, rules=None):
         for index in range(0, len(names)):
             name = names[index]
@@ -121,7 +155,10 @@ class Turing:
         for rule in rules:
             self.add_rule_from_list(rule)
 
+    # Transition the turing machine head, base on the current state,
+    # head input, and ruleset
     def transition(self):
+        analysis.operations+=1
         head = self.get_head()
         rule = self.curr_state.get_rule(head)
         if (rule):
@@ -134,6 +171,7 @@ class Turing:
         else:
             self.curr_state = self.states[REJECT]
 
+    # Transition on tape input until state is ACCEPT or REJECT
     def run(self):
         while (not self.is_halted()):
             self.transition()
@@ -141,12 +179,18 @@ class Turing:
             return self.tape
         else:
             return "REJECT"
-        
+
+    # Utility function for testing transitions    
     def print_debug(self):
         print("Tape= {0}".format(self.tape))
         print("Head= {0} ({1})".format(self.get_head(), self.head_index))
         print("State= {0}".format(self.curr_state))
 
+'''
+# The following driver converts a string input to a character list
+# Then runs the turing machine using a ruleset for unary subtraction
+# It returns the resulting tape char list
+'''
 def turing_driver(input):
     tape = list(input)
     turing = Turing(tape, 0)
@@ -218,5 +262,6 @@ def turing_driver(input):
     turing.add_states_from_list(states)
     turing.add_rules_from_list(rules)
     result = turing.run()
-    #print("Result= {0}".format(result))
+    analysis.result = result
+    analysis.space = len(turing.tape)
     return result
