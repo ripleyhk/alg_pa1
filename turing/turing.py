@@ -3,7 +3,8 @@
 # Author: Hannah Ripley
 # Date: 09/30/2024
 # Problem 2: Deterministic Turing Machine (DTM)
-# Description: 
+# Description: A rule-agnostic DTM and a ruleset to calculate unary subtraction
+# on an input string of two operands, formatted: "1+#1+"
 '''
 
 '''

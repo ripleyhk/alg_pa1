@@ -41,9 +41,9 @@ if __name__ == "__main__":
     #     closest_pairs_brute_n(size)
     #     clean_artifact("{0}_pairs.txt".format(size))
 
-    size = 100
-    print("Brute Force Performance:")
-    closest_pairs_brute_n(size)
+    size = 13
+    # print("Brute Force Performance:")
+    # closest_pairs_brute_n(size)
     print("Recursive Performance:")
     closest_pairs_recursive_n(size)
     clean_artifact("{0}_pairs.txt".format(size))
