@@ -4,41 +4,48 @@ import math
 # Author: Hannah Ripley
 # Date: 09/30/2024
 # Problem 1: Closest Pairs
-# Description: A suite of algorithms for pairing Points (x, y), based on proximity
+# Description: A suite of algorithms for determing the closest two Points, each defined (x, y), based on distance
 '''
 
 # ---------- Display Functions ----------
 '''
-# The following functions are used to display the results of the pairing algorithm,
-# either to the console/terminal, for result pair lists <= 30
-# or to an output file (pairs.txt by default)
+# The following functions are used to display the result of a pairing algorithm,
+# either to the console/terminal, for input <= 30
+# or to an output file
 #
 # This functionality is not being evaluated for running time complexity
 '''
 
-# Display pairs, either by printing to console (pairs list length <= 30)
-# @param pairs list of pairs of closest points
-# @param filename name of file to write pairs list to
-# or by writing to a file (either user-specified or pairs.txt by default)
-def display_pairs(pairs, filename):
-    if (len(pairs) <= 30):
-        print_pairs(pairs)
+# Display pair, either by printing to console (points list length <= 30)
+# @param points list of all input points
+# @param pair of closest two points
+# @param filename name of file to write result to
+# or by writing to a file
+def display_pair(points, pair, filename):
+    if (len(points) <= 30):
+        print_pair(points, pair)
     else:
-        write_pairs(pairs, filename)
+        write_pair(points, pair, filename)
 
-# Print pairs to console
-# @param pairs list of pairs of closest points
-def print_pairs(pairs):
-    for pair in pairs:
-        print(pair)
+# Print closest pair to console
+# @param points list of all input points
+# @param pair of closest two points
+def print_pair(points, pair):
+    print("For Data Set:")
+    print("{}".format(points))
+    pretty_distance = round(pair.distance, 2)
+    print("Closest Pair= {}\n Distance={}\n".format(pair, pretty_distance))
 
-# Write pairs to file, (pairs)
-# @param pairs list of pairs of closest points
-# @param filename name of file to write pairs list to
-def write_pairs(pairs, filename):
+# Write closest pair to file
+# @param points list of all input points
+# @param pair of closest two points
+# @param filename name of file to write result to
+def write_pair(points, pair, filename):
     f = open(filename, "w")
-    for pair in pairs:
-        f.write("{0}\n".format(pair))
+    f.write("For Data Set:\n")
+    f.write("{}\n".format(points))
+    pretty_distance = round(pair.distance, 2)
+    f.write("Closest Pair= {}\n Distance={}\n".format(pair, pretty_distance))
     f.close()
 
 # ---------- Object Functions ----------
@@ -53,10 +60,14 @@ class Point:
         self.y = y
 
     def __str__(self):
-        return "[{0},{1}]".format(self.x, self.y)
+        pretty_x = round(self.x, 2)
+        pretty_y = round(self.y, 2)
+        return "[{0},{1}]".format(pretty_x, pretty_y)
 
     def __repr__(self):
-        return "[{0},{1}]".format(self.x, self.y)
+        pretty_x = round(self.x, 2)
+        pretty_y = round(self.y, 2)
+        return "[{0},{1}]".format(pretty_x, pretty_y)
 
     def __eq__(self, other):
         return (math.isclose(self.x, other.x)) and (math.isclose(self.y, other.y))
@@ -67,7 +78,7 @@ class Point:
 # This functionality is not being evaluated for running time complexity
 '''
 class Pair:
-    def __init__ (self, point1, point2, distance):
+    def __init__ (self, point1: Point=None, point2: Point=None, distance=math.inf):
         self.point1 = point1
         self.point2 = point2
         self.distance = distance
@@ -82,9 +93,8 @@ class Pair:
         return "({0}, {1})".format(self.point1, self.point2)
 
     def __eq__(self, other):
-        if type(other) is Pair:
-            return self.get_pair() == other.get_pair()
-        return self.get_pair() == other
+        return ((self.point1 == other.point1 and self.point2 == other.point2) or
+                (self.point1 == other.point2 and self.point2 == other.point1))
 '''
 # The following structure is used to hold both the result and operation count for a particular
 # execution of a function, for use in complexity analysis
@@ -126,7 +136,7 @@ def get_analysis():
 # @param point1 first point, containing an x and y coordinate
 # @param point 2 second point, containing an x and y coordinate
 # @returns Euclidian distance between point1 and point2
-def calculate_distance(point1, point2):
+def calculate_distance(point1: Point, point2: Point):
     delta_x2 = math.pow(point2.x - point1.x, 2)
     delta_y2 = math.pow(point2.y - point1.y, 2)
     distance = math.sqrt(delta_x2 + delta_y2)
@@ -138,37 +148,33 @@ def calculate_distance(point1, point2):
 # Pseudocode (1.a):
 #
 # List of Pairs = EMPTY LIST
-# For index1 starting at 0 -> length of Data Set A:
 #   initial minimum distance = INFINITY (so any actual distance will be smaller)
-#   index of closest Point = UNDEFINED (because no comparisons have been made yet)
+#   initial closest pair = UNDEFINED (because no comparisons have been made yet)
+# For index1 starting at 0 -> length of Data Set A:
 #   For index2 starting at 0 -> length of Data Set A:
 #       skip over index1 == index2 (because the Point should not consider itself as a closet Point)
 #       distance = euclidian distance(Point at index1, Point at index2)
 #       if distance is smaller than the current mimimum distance:
 #           update minimum distance = distance
-#           update index of closest Point = index2
-#   Create a new Pair containing the Point at index1 and the Point at the index of the closest Point
-#   Add new Pair to the List of Pairs
-#   Write Results to Either Console or File
+#           update closest pair = (point at index1, point at index2)
+#   return (closest pair, minimum distance)
 '''
 
 '''
 # Brute Force Implementation (1.b)
-# Description: Find the closest Point to each Point in the Data Set
+# Description: Find the closest pair of points in a data set
 # Either print the results to console if the size of the data set <= 30
-# Else write the results to pairs.txt
+# Else write the results to pair.txt
 '''
 
 # 
-# Main function for calculating the closest pairs using the brute force algorithm described above
+# Main function for calculating the closest pair of points using the brute force algorithm described above
 # @params points Data Set containing a list of Points
-# @returns the list of pairs generated by the brute force algorithm
-def closest_pairs_brute(points):
-    pairs = []
+# @returns the pair of closest two points and their distance
+def closest_pair_brute(points) -> Pair:
     operations = 0
+    min_pair = Pair()
     for index_i in range(len(points)):
-        min_distance = math.inf
-        closest_index = -1
         for index_j in range(len(points)):
             if (index_i == index_j): 
                 continue
@@ -179,21 +185,21 @@ def closest_pairs_brute(points):
             '''
             distance = calculate_distance(points[index_i], points[index_j])
             operations += 1
-            if (distance < min_distance):
+            if (distance < min_pair.distance):
                 min_distance = distance
                 closest_index = index_j
-        pair = (points[index_i], points[closest_index])
-        pair = Pair(points[index_i], points[closest_index], min_distance)
-        pairs.append(pair)
-    analysis.result = pairs
+                min_pair.point1 = points[index_i]
+                min_pair.point2 = points[index_j]
+                min_pair.distance = distance
+    analysis.result = min_pair
     analysis.operations = operations
-    return pairs
+    return min_pair
 
 
-def closest_pairs_brute_driver(points, filename="pairs.txt"):
-    pairs = closest_pairs_brute(points)
-    display_pairs(pairs, filename)
-    return pairs
+def closest_pair_brute_driver(points, filename="pair.txt") -> Pair:
+    pair = closest_pair_brute(points)
+    display_pair(points, pair, filename)
+    return pair
 
 
 
@@ -203,55 +209,88 @@ def closest_pairs_brute_driver(points, filename="pairs.txt"):
 #
 #
 #
-# parse pairs out of distance to get list of closest_pairs 
 '''
 
 
 
 '''
 # Recursive Implementation (1.d)
-# Description: Find the closest Point to each Point in the Data Set
+# Description: Find the closest pair of points in a data set
 # Either print the results to console if the size of the data set <= 30
 # Else write the results to pairs.txt
 '''
 
 
 # 
-# Main function for calculating the closest pairs using the recursive algorithm described above
+# Main function for calculating the closest pair of points using the recursive algorithm described above
 # @params points Data Set containing a list of Points
-# @returns the list of closest pairs generated by the recursive algorithm
-# as well as a count of the number of distance calculations, for use in complexity analysis
-def closest_pairs_recursive(points):
-    pairs = []
+# @returns the pair of closest two points and their distance
+def closest_pair_recursive(points) -> Pair:
+    min_pair = Pair()
     operations = 0
+    # if (len(points) <= 3):
+    #     pairs = closest_pair_brute(points)
+    # else:
+    #     points = merge_sort(points, "x")
+    #     midpoint = len(points)//2
+    #     points_l = points[:midpoint]
+    #     points_r = points[midpoint:]
+    #     pairs_l = closest_pair_recursive(points_l)
+    #     pairs_r = closest_pair_recursive(points_r)
 
-    if (len(points) <= 3):
-        points = closest_pairs_brute(points)
-    else:
-        midpoint = len(points)//2
-        points_l = points[:midpoint]
-        points_r = points[midpoint:]
-        pairs_l = closest_pairs_recursive(points_l)
-        pairs_r = closest_pairs_recursive(points_r)
+    #     index_l = 0
+    #     index_r = 0
 
-        index_l = 0
-        index_r = 0
+    #     while (index_l < len(pairs_l) and index_r < len(pairs_r)):
+    #         pair_l = pairs_l[index_l]
+    #         pair_r = pairs_r[index_r]
+    #         if (pair_l.distance < pair_r.distance):
+    #             pairs.append(pair_l)
+    #             index_l+=1
+    #         else:
+    #             pairs.append(pair_r)
+    #             index_r+=1
 
-        while (index_l < len(pairs_l) and index_r < len(pairs_r)):
-            index_l+=1
-            index_r+=1
+    #     while (index_l < len(pairs_l)):
+    #         pairs.append(pair_l)
+    #         index_l+=1
 
-        while (index_l < len(pairs_l)):
-            index_l+=1
-
-        while (index_r < len(pairs_r)):
-            index_r+=1
+    #     while (index_r < len(pairs_r)):
+    #         pairs.append(pair_r)
+    #         index_r+=1
         
-    analysis.result = pairs
-    return pairs
+    analysis.result = min_pair
+    return min_pair
 
+def merge_sort(points, sort_on="x") -> list[Point]:
+    if (len(points) < 2):
+        return points
+    
+    sorted = []
+    midpoint = len(points)//2
+    points_l = merge_sort(points[:midpoint])
+    points_r = merge_sort(points[midpoint:])
 
-def closest_pairs_recursive_driver(points, filename="pairs.txt"):
-    pairs = closest_pairs_recursive(points)
-    display_pairs(pairs, filename)
-    return pairs
+    index_l = 0
+    index_r = 0
+    while (index_l < len(points_l) and index_r < len(points_r)):
+        point_l = points_l[index_l]
+        point_r = points_r[index_r]
+        if (point_l.__getattribute__(sort_on) < point_r.__getattribute__(sort_on)):
+            sorted.append(point_l)
+            index_l+=1
+        else:
+            sorted.append(point_r)
+            index_r+=1
+    while (index_l < len(points_l)):
+        sorted.append(point_l)
+        index_l+=1
+    while (index_r < len(points_r)):
+        sorted.append(point_r)
+        index_r+=1
+    return sorted
+
+def closest_pair_recursive_driver(points, filename="pairs.txt"):
+    pair = closest_pair_recursive(points)
+    display_pair(points, pair, filename)
+    return pair

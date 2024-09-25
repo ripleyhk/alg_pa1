@@ -30,20 +30,28 @@ def count_lines(filename):
     return lines
 
 # Generate a random point where floor <= x, y <= ceiling
-def generate_random_point(floor=0, ceiling=100):
+def generate_random_point(floor=0, ceiling=100) -> Point:
     x = random.randint(floor, ceiling)
     y = random.randint(floor, ceiling)
     point = Point(x, y)
     return point
 
+# Generate a random point, some distance away from another point
+def generate_point_by_distance(distance, other: Point) -> Point:
+    angle = random.uniform(0, 2*math.pi)
+    x = other.x + distance * math.cos(angle)
+    y = other.y + distance * math.sin(angle)
+    return Point(x, y)
+
 # Generate a pair of random points:
-def generate_random_pair():
+def generate_random_pair() -> Pair:
     point1 = generate_random_point()
     point2 = generate_random_point()
-    return (point1, point2)
+    dist = calculate_distance(point1, point2)
+    return Pair(point1, point2, dist)
 
 # Generate a list of random (i.e. not algorithmically paired) pairs of length size
-def generate_random_pairs_list(size):
+def generate_random_pairs_list(size) -> list[Pair]:
     pairs = []
     for index in range(size):
         pair = generate_random_pair()
@@ -51,35 +59,35 @@ def generate_random_pairs_list(size):
     return pairs
 
 # Generate a list of random Points of length size
-def generate_random_points_list(size):
+def generate_random_points_list(size) -> list[Point]:
     points = []
     for index in range(size):
         point = generate_random_point()
         points.append(point)
     return points
 
-class ClosePairs:
-    def __init__ (self, pairs, points):
-        self.pairs = pairs
+class ClosePair:
+    def __init__ (self, pair, points):
+        self.pair = pair
         self.points = points
 
-# Generate a structure containing points and close pairs
-def generate_closest_pairs_list(n):
-    pairs = []
+# Generate a structure containing points and a closest pair
+# with a distance of min_dist if specified, else 0.5
+def generate_points_and_pair(n, min_dist=0.5) -> ClosePair:
+    point0 = generate_random_point()
+    point = generate_point_by_distance(min_dist, point0)
+    pair = Pair(point0, point, min_dist)
     points = []
-    # create a series of closest pairs of points
-    for i in range(n):
-        x1 = round(10*i + random.random() * 5, 2)
-        y1 = round(10*i + random.random() * 5, 2)
-        x2 = round(10*i + random.random() * 5, 2)
-        y2 = round(10*i + random.random() * 5, 2)
-        point1 = Point(x1, y1)
-        point2 = Point(x2, y2)
-        pairs.append((point1, point2))
-        pairs.append((point2, point1))
-        points.append(point1)
-        points.append(point2)
+
+    points.append(point0)
+    points.append(point)
+    distance = min_dist
+    for index in range(1, n-2):
+        distance += min_dist*index
+        next_point = generate_point_by_distance(distance, point)
+        points.append(next_point)
+        point = next_point
     
     # randomize the list of points
     random.shuffle(points)
-    return ClosePairs(pairs, points)
+    return ClosePair(pair, points)
