@@ -147,9 +147,8 @@ def calculate_distance(point1: Point, point2: Point):
 '''
 # Pseudocode (1.a):
 #
-# List of Pairs = EMPTY LIST
-#   initial minimum distance = INFINITY (so any actual distance will be smaller)
-#   initial closest pair = UNDEFINED (because no comparisons have been made yet)
+# initial minimum distance = INFINITY (so any actual distance will be smaller)
+# initial closest pair = UNDEFINED (because no comparisons have been made yet)
 # For index1 starting at 0 -> length of Data Set A:
 #   For index2 starting at 0 -> length of Data Set A:
 #       skip over index1 == index2 (because the Point should not consider itself as a closet Point)
@@ -157,7 +156,7 @@ def calculate_distance(point1: Point, point2: Point):
 #       if distance is smaller than the current mimimum distance:
 #           update minimum distance = distance
 #           update closest pair = (point at index1, point at index2)
-#   return (closest pair, minimum distance)
+# return (closest pair, minimum distance)
 '''
 
 '''
@@ -207,8 +206,16 @@ def closest_pair_brute_driver(points, filename="pair.txt") -> Pair:
 '''
 # Pseudocode (1.c):
 #
-#
-#
+# Use merge sort to sort Data Set A by x
+# If length of Data Set A <=3:
+#   return closest_pair_brute(Data Set A)
+# Else:
+#   left pair,  dist = closest_pair(first half of Data Set A)
+#   right pair, dist = closest_pair(second half of Data Set A)
+#   if left dist < right dist:
+#       return (left pair, left distance)
+#   else:
+#       return (right pair, right distance)
 '''
 
 
@@ -228,37 +235,19 @@ def closest_pair_brute_driver(points, filename="pair.txt") -> Pair:
 def closest_pair_recursive(points) -> Pair:
     min_pair = Pair()
     operations = 0
-    # if (len(points) <= 3):
-    #     pairs = closest_pair_brute(points)
-    # else:
-    #     points = merge_sort(points, "x")
-    #     midpoint = len(points)//2
-    #     points_l = points[:midpoint]
-    #     points_r = points[midpoint:]
-    #     pairs_l = closest_pair_recursive(points_l)
-    #     pairs_r = closest_pair_recursive(points_r)
-
-    #     index_l = 0
-    #     index_r = 0
-
-    #     while (index_l < len(pairs_l) and index_r < len(pairs_r)):
-    #         pair_l = pairs_l[index_l]
-    #         pair_r = pairs_r[index_r]
-    #         if (pair_l.distance < pair_r.distance):
-    #             pairs.append(pair_l)
-    #             index_l+=1
-    #         else:
-    #             pairs.append(pair_r)
-    #             index_r+=1
-
-    #     while (index_l < len(pairs_l)):
-    #         pairs.append(pair_l)
-    #         index_l+=1
-
-    #     while (index_r < len(pairs_r)):
-    #         pairs.append(pair_r)
-    #         index_r+=1
-        
+    if (len(points) <= 3):
+        min_pair = closest_pair_brute(points)
+    else:
+        midpoint = len(points)//2
+        points_l = points[:midpoint]
+        points_r = points[midpoint:]
+        pair_l = closest_pair_recursive(points_l)
+        pair_r = closest_pair_recursive(points_r)
+        print("L={}, R={}".format(pair_l, pair_r))
+        if (pair_l.distance < pair_r.distance):
+            min_pair = pair_l
+        else:
+            min_pair = pair_r
     analysis.result = min_pair
     return min_pair
 
@@ -292,5 +281,6 @@ def merge_sort(points, sort_on="x") -> list[Point]:
 
 def closest_pair_recursive_driver(points, filename="pairs.txt"):
     pair = closest_pair_recursive(points)
-    display_pair(points, pair, filename)
+    sorted_points = merge_sort(points, "x")
+    display_pair(sorted_points, pair, filename)
     return pair
