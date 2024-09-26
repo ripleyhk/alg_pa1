@@ -1,8 +1,6 @@
-import random
-import os
-import math
+from closest_pairs import *
+import os, random, math
 
-from pairs import *
 
 '''
 # Author: Hannah Ripley
@@ -93,7 +91,6 @@ def generate_points_and_pair(n, min_dist=0.5) -> ClosePair:
         distance = min_dist + random.uniform(0.5, min_dist)
         next_point = generate_point_by_distance(distance, next_point)
         points.append(next_point)
-    return ClosePair(pair, points)
 
     # randomize the list of points
     random.shuffle(points)

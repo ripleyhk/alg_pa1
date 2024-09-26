@@ -1,4 +1,5 @@
-import math
+import argparse, math
+from generate_pairs import *
 
 '''
 # Author: Hannah Ripley
@@ -34,7 +35,7 @@ def print_pair(points, pair):
     print("For Data Set:")
     print("{}".format(points))
     pretty_distance = round(pair.distance, 2)
-    print("Closest Pair= {}\n Distance={}\n".format(pair, pretty_distance))
+    print("Closest Pair= {}\nDistance={}\n".format(pair, pretty_distance))
 
 # Write closest pair to file
 # @param points list of all input points
@@ -45,7 +46,7 @@ def write_pair(points, pair, filename):
     f.write("For Data Set:\n")
     f.write("{}\n".format(points))
     pretty_distance = round(pair.distance, 2)
-    f.write("Closest Pair= {}\n Distance={}\n".format(pair, pretty_distance))
+    f.write("Closest Pair= {}\nDistance={}\n".format(pair, pretty_distance))
     f.close()
 
 # ---------- Object Functions ----------
@@ -111,11 +112,14 @@ class Analysis:
         self.result = None
         self.operations = 0
 
+    def operations_str(self):
+        return "Total Operations={0}".format(self.operations)
+
     def __str__(self):
-        return "{0}\nTotal Operations={1}".format(result, operations)
+        return "{0}\nTotal Operations={1}".format(self.result, self.operations)
 
     def __repr__(self):
-        return "{0}\nTotal Operations={1}".format(result, operations)
+        return "{0}\nTotal Operations={1}".format(self.result, self.operations)
 
 analysis = Analysis()
 def get_analysis():
@@ -318,3 +322,20 @@ def closest_pair_recursive_driver(points, filename="pairs.txt"):
     sorted_points = merge_sort(points, "x")
     display_pair(sorted_points, pair, filename)
     return pair
+
+
+if __name__ == "__main__":
+    parser=argparse.ArgumentParser(prog="Closest Pairs", description="Calculate the closest pair of points in a data set")
+    parser.add_argument("mode", choices=['brute', 'recursive', 'b', 'r'], help="Algorithm mode")
+    parser.add_argument("n", type=int, help="Size of dataset to generate")
+    parser.add_argument("-f", "--filename", nargs='?', default="pairs.txt", help="File to write closest pair data")
+    parser.add_argument("-a", "--analytics", action="store_true", help="Show algorithm analytics")
+    args=parser.parse_args()
+    
+    points = generate_random_points_list(args.n)
+    if args.mode=='brute' or args.mode=='b':
+        closest_pair_brute_driver(points, args.filename)
+    else:
+        closest_pair_recursive_driver(points, args.filename)
+    if args.analytics:
+        print(analysis.operations_str())

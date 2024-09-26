@@ -1,6 +1,5 @@
-import unittest
-import os
-from pairs import *
+import os, unittest
+from closest_pairs import *
 from generate_pairs import *
 
 
