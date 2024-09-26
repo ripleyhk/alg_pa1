@@ -1,5 +1,6 @@
 import random
 import os
+import math
 
 from pairs import *
 
@@ -38,7 +39,7 @@ def generate_random_point(floor=0, ceiling=100) -> Point:
 
 # Generate a random point, some distance away from another point
 def generate_point_by_distance(distance, other: Point) -> Point:
-    angle = random.uniform(0, 2*math.pi)
+    angle = random.uniform(math.pi/-3, math.pi/3)
     x = other.x + distance * math.cos(angle)
     y = other.y + distance * math.sin(angle)
     return Point(x, y)
@@ -74,20 +75,26 @@ class ClosePair:
 # Generate a structure containing points and a closest pair
 # with a distance of min_dist if specified, else 0.5
 def generate_points_and_pair(n, min_dist=0.5) -> ClosePair:
-    point0 = generate_random_point()
-    point = generate_point_by_distance(min_dist, point0)
-    pair = Pair(point0, point, min_dist)
     points = []
-
-    points.append(point0)
-    points.append(point)
-    distance = min_dist
-    for index in range(1, n-2):
-        distance += min_dist*index
-        next_point = generate_point_by_distance(distance, point)
+    root = random.randint(1, n-2)
+    next_point = generate_random_point()
+    points.append(next_point)
+    for index in range(1, root):
+        distance = min_dist + random.uniform(0.5, min_dist)
+        next_point = generate_point_by_distance(distance, next_point)
         points.append(next_point)
-        point = next_point
-    
+
+    point = next_point
+    next_point = generate_point_by_distance(min_dist, point)
+    points.append(next_point)
+    pair = Pair(point, next_point, min_dist)
+
+    for index in range(root+1, n):
+        distance = min_dist + random.uniform(0.5, min_dist)
+        next_point = generate_point_by_distance(distance, next_point)
+        points.append(next_point)
+    return ClosePair(pair, points)
+
     # randomize the list of points
     random.shuffle(points)
     return ClosePair(pair, points)

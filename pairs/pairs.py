@@ -168,10 +168,9 @@ def calculate_distance(point1: Point, point2: Point):
 
 # 
 # Main function for calculating the closest pair of points using the brute force algorithm described above
-# @params points Data Set containing a list of Points
+# @param points Data Set containing a list of Points
 # @returns the pair of closest two points and their distance
 def closest_pair_brute(points) -> Pair:
-    operations = 0
     min_pair = Pair()
     for index_i in range(len(points)):
         for index_j in range(len(points)):
@@ -183,19 +182,17 @@ def closest_pair_brute(points) -> Pair:
             # any two Points
             '''
             distance = calculate_distance(points[index_i], points[index_j])
-            operations += 1
+            analysis.operations += 1
             if (distance < min_pair.distance):
-                min_distance = distance
-                closest_index = index_j
                 min_pair.point1 = points[index_i]
                 min_pair.point2 = points[index_j]
                 min_pair.distance = distance
     analysis.result = min_pair
-    analysis.operations = operations
     return min_pair
 
 
 def closest_pair_brute_driver(points, filename="pair.txt") -> Pair:
+    analysis.operations = 0
     pair = closest_pair_brute(points)
     display_pair(points, pair, filename)
     return pair
@@ -207,15 +204,23 @@ def closest_pair_brute_driver(points, filename="pair.txt") -> Pair:
 # Pseudocode (1.c):
 #
 # Use merge sort to sort Data Set A by x
+# 
 # If length of Data Set A <=3:
 #   return closest_pair_brute(Data Set A)
 # Else:
 #   left pair,  dist = closest_pair(first half of Data Set A)
 #   right pair, dist = closest_pair(second half of Data Set A)
 #   if left dist < right dist:
-#       return (left pair, left distance)
+#       min pair, dist = left pair, dist
 #   else:
-#       return (right pair, right distance)
+#       min pair, dist = right pair, dist
+# midpoint = Data Set A [middle index]
+# bisecting points = every point closer to the midpoint than the current min dist
+# bisecting pair, dist = closest_pair(bisecting points)
+# if bisecting dist < min dist:
+#  return bisecting pair, dist
+# else:
+#   return min pair, dist
 '''
 
 
@@ -230,39 +235,88 @@ def closest_pair_brute_driver(points, filename="pair.txt") -> Pair:
 
 # 
 # Main function for calculating the closest pair of points using the recursive algorithm described above
-# @params points Data Set containing a list of Points
+# @param points Data Set containing a list of Points
 # @returns the pair of closest two points and their distance
 def closest_pair_recursive(points) -> Pair:
+    analysis.operations+=1
     min_pair = Pair()
-    operations = 0
     if (len(points) <= 3):
         min_pair = closest_pair_brute(points)
     else:
-        midpoint = len(points)//2
-        points_l = points[:midpoint]
-        points_r = points[midpoint:]
+        middle = len(points)//2
+        points_l = points[:middle]
+        points_r = points[middle:]
         pair_l = closest_pair_recursive(points_l)
         pair_r = closest_pair_recursive(points_r)
-        print("L={}, R={}".format(pair_l, pair_r))
         if (pair_l.distance < pair_r.distance):
             min_pair = pair_l
         else:
             min_pair = pair_r
+        points_b = get_bisecting_points(points, min_pair)
+
+        # If all points bisect, do brute force to prevent infinite loop
+        if (len(points_b) == len(points)):
+            pair_b = closest_pair_brute(points_b)
+        # Otherwise, proceed using recursion
+        else:
+            pair_b = closest_pair_recursive(points_b)
+
+        if (pair_b.distance < min_pair.distance):
+            min_pair = pair_b
     analysis.result = min_pair
     return min_pair
 
+
+#
+# Get the list of points that surround the midpoint
+# i.e. closer than closest pair's distance
+# Points must exist on both sides of midpoint, else return empty list
+# @param points Data Set containing the list of Points
+# @param closest_pair the current closest pair (and its distance)
+# @returns the list of points surrounding the midpoint (that may be part of a bisecting pair)
+#
+def get_bisecting_points(points: list[Point], closest_pair: Pair):   
+    bisecting_points = []
+    bisect_left = False
+    bisect_right = False
+
+    middle = len(points)//2
+    midpoint = points[middle]
+
+    for point in points[:middle]:
+        analysis.operations+=1 
+        midpoint.y = point.y
+        distance = calculate_distance(midpoint, point)
+        if (distance < closest_pair.distance):
+            bisecting_points.append(point)
+            bisect_left = True
+
+    for point in points[middle:]: 
+        analysis.operations +=1
+        midpoint.y = point.y
+        distance = calculate_distance(midpoint, point)
+        if (distance < closest_pair.distance):
+            bisecting_points.append(point)
+            bisect_right = True
+
+    # Points must bisect the midpoint
+    if (not(bisect_left and bisect_right)):
+        return []
+    else:
+        return bisecting_points
+
 def merge_sort(points, sort_on="x") -> list[Point]:
+    analysis.operations+=1
     if (len(points) < 2):
         return points
-    
     sorted = []
     midpoint = len(points)//2
     points_l = merge_sort(points[:midpoint])
     points_r = merge_sort(points[midpoint:])
-
     index_l = 0
     index_r = 0
     while (index_l < len(points_l) and index_r < len(points_r)):
+        analysis.operations+=1
         point_l = points_l[index_l]
         point_r = points_r[index_r]
         if (point_l.__getattribute__(sort_on) < point_r.__getattribute__(sort_on)):
@@ -272,14 +326,17 @@ def merge_sort(points, sort_on="x") -> list[Point]:
             sorted.append(point_r)
             index_r+=1
     while (index_l < len(points_l)):
+        analysis.operations+=1
         sorted.append(point_l)
         index_l+=1
     while (index_r < len(points_r)):
+        analysis.operations+=1
         sorted.append(point_r)
         index_r+=1
     return sorted
 
 def closest_pair_recursive_driver(points, filename="pairs.txt"):
+    analysis.operations = 0
     pair = closest_pair_recursive(points)
     sorted_points = merge_sort(points, "x")
     display_pair(sorted_points, pair, filename)

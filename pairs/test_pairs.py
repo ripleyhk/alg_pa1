@@ -55,54 +55,46 @@ class UnitTests(unittest.TestCase):
 
 class IntegrationTests(unittest.TestCase):
 
-    # #Test the closest pair brute force algorithm for a data set < 30
-    # def test_closest_pair_brute_small(self):
-    #     min_dist = 11
-    #     n = 20
-    #     test_data = generate_points_and_pair(n, min_dist)
-    #     points = test_data.points
-    #     expected = test_data.pair
-    #     actual = closest_pair_brute_driver(points)
-    #     self.assertTrue(math.isclose(expected.distance, actual.distance, rel_tol=1e-03),
-    #                     "Expected {} but was {}".format(expected.distance, actual.distance))
-    #     self.assertEqual(expected, actual)
-
-    # # Test the closest pair brute force algorithm for a data set > 30
-    # def test_closest_pair_brute_medium(self):
-    #     min_dist = 0.75
-    #     n = 40
-    #     test_data = generate_points_and_pair(n, min_dist)
-    #     points = test_data.points
-    #     expected = test_data.pair
-    #     actual = closest_pair_brute_driver(points, "brute_medium.txt")
-    #     clean_artifact("brute_medium.txt")
-    #     self.assertTrue(math.isclose(expected.distance, actual.distance, rel_tol=1e-03),
-    #                     "Expected {} but was {}".format(expected.distance, actual.distance))
-    #     self.assertEqual(expected, actual)
-
-    # # Test the closest pair brute force algorithm for an odd-numbered data set
-    # def test_closest_pair_brute_odd(self):
-    #     min_dist = 3
-    #     n = 13
-    #     test_data = generate_points_and_pair(n, min_dist)
-    #     points = test_data.points
-    #     expected = test_data.pair
-    #     actual = closest_pair_brute_driver(points)
-    #     self.assertTrue(math.isclose(expected.distance, actual.distance, rel_tol=1e-03),
-    #                     "Expected {} but was {}".format(expected.distance, actual.distance))
-    #     self.assertEqual(expected, actual)
-
-    #Test the closest pair recursive force algorithm for a data set < 30
-    def test_closest_pair_recursive_small(self):
+    #Test the closest pair brute force algorithm for a data set < 30
+    def test_closest_pair_brute_small(self):
         min_dist = 11
         n = 20
         test_data = generate_points_and_pair(n, min_dist)
         points = test_data.points
         expected = test_data.pair
-        actual = closest_pair_recursive_driver(points)
-        self.assertTrue(math.isclose(expected.distance, actual.distance, rel_tol=1e-03),
-                        "Expected {} but was {}".format(expected.distance, actual.distance))
-        self.assertEqual(expected, actual)
+        actual = closest_pair_brute_driver(points)
+        self.assertEqual(expected, actual, "Distance {} != {}".format(expected.distance, actual.distance))
+
+    # Test the closest pair brute force algorithm for a data set > 30
+    def test_closest_pair_brute_medium(self):
+        min_dist = 0.75
+        n = 40
+        test_data = generate_points_and_pair(n, min_dist)
+        points = test_data.points
+        expected = test_data.pair
+        actual = closest_pair_brute_driver(points, "brute_medium.txt")
+        clean_artifact("brute_medium.txt")
+        self.assertEqual(expected, actual, "Distance {} != {}".format(expected.distance, actual.distance))
+
+    # Test the closest pair brute force algorithm for an odd-numbered data set
+    def test_closest_pair_brute_odd(self):
+        min_dist = 3
+        n = 13
+        test_data = generate_points_and_pair(n, min_dist)
+        points = test_data.points
+        expected = test_data.pair
+        actual = closest_pair_brute_driver(points)
+        self.assertEqual(expected, actual, "Distance {} != {}".format(expected.distance, actual.distance))
+
+    #Test the closest pair recursive force algorithm for a data set < 30
+    # def test_closest_pair_recursive_small(self):
+    #     min_dist = 20
+    #     n = 15
+    #     test_data = generate_points_and_pair(n, min_dist)
+    #     points = test_data.points
+    #     expected = test_data.pair
+    #     actual = closest_pair_recursive_driver(points)
+    #     self.assertEqual(expected, actual, "Distance {} != {}".format(expected.distance, actual.distance))
 
     # # Test the closest pair recursive algorithm for a data set > 30
     # def test_closest_pair_recursive_medium(self):
@@ -113,9 +105,7 @@ class IntegrationTests(unittest.TestCase):
     #     expected = test_data.pair
     #     actual = closest_pair_recursive_driver(points, "brute_medium.txt")
     #     clean_artifact("brute_medium.txt")
-    #     self.assertTrue(math.isclose(expected.distance, actual.distance, rel_tol=1e-03),
-    #                     "Expected {} but was {}".format(expected.distance, actual.distance))
-    #     self.assertEqual(expected, actual)
+    #     self.assertEqual(expected, actual, "Distance {} != {}".format(expected.distance, actual.distance))
 
     # # Test the closest pair recursive algorithm for an odd-numbered data set
     # def test_closest_pair_recursive_odd(self):
@@ -125,9 +115,7 @@ class IntegrationTests(unittest.TestCase):
     #     points = test_data.points
     #     expected = test_data.pair
     #     actual = closest_pair_recursive_driver(points)
-    #     self.assertTrue(math.isclose(expected.distance, actual.distance, rel_tol=1e-03),
-    #                     "Expected {} but was {}".format(expected.distance, actual.distance))
-    #     self.assertEqual(expected, actual)
+    #     self.assertEqual(expected, actual, "Distance {} != {}".format(expected.distance, actual.distance))
 
 if __name__ == '__main__':
     unittest.main()

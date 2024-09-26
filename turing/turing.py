@@ -258,8 +258,8 @@ def turing_driver(input):
         ["q17", "#", 1, "q18", "#"],
         ["q18", "X", 1, "q18", "1"],
         ["q18", "#", 0, ACCEPT, "#"]
-
     ]
+    
     turing.add_states_from_list(states)
     turing.add_rules_from_list(rules)
     result = turing.run()

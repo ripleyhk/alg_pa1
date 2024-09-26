@@ -11,7 +11,7 @@ import random
 # 
 # Get the number of operations for running the brute force closest pair algorithm
 # on a data set of n random Points where 0 <= x, y <= 100
-# @params n
+# @param n
 def closest_pair_brute_n(n):
     data_set = generate_random_points_list(n)
     closest_pair_brute_driver(data_set, "{0}_pairs.txt".format(n))
@@ -23,7 +23,7 @@ def closest_pair_brute_n(n):
 # 
 # Get the number of operations for running the recursive closest pair algorithm
 # on a data set of n random Points where 0 <= x, y <= 100
-# @params n
+# @param n
 def closest_pair_recursive_n(n):
     data_set = generate_random_points_list(n)
     closest_pair_recursive_driver(data_set, "{0}_pairs.txt".format(n))
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     #     closest_pair_brute_n(size)
     #     clean_artifact("{0}_pairs.txt".format(size))
 
-    size = 13
+    size = 50
     # print("Brute Force Performance:")
     # closest_pair_brute_n(size)
     print("Recursive Performance:")
