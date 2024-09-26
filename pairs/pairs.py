@@ -1,4 +1,4 @@
-import argparse, math
+import argparse, math, ast
 from objects import Point
 from main import *
 from utils import generate_random_points_list
@@ -8,7 +8,10 @@ from utils import generate_random_points_list
 # Date: 09/30/2024
 # Description: Driver for running Closest Pair algorithms on random dataset of input size n
 # See "/pairs/main/closest_pairs.py" for algorithm implmentations
+#
+# This file is not being evaluated for running time complexity.
 '''
+
 
 if __name__ == "__main__":
     parser=argparse.ArgumentParser(prog="Closest Pairs", description="Calculate the closest pair of points in a data set")
@@ -17,7 +20,7 @@ if __name__ == "__main__":
     group= parser.add_argument_group('Input')
     group_ex = group.add_mutually_exclusive_group()
     group_ex.add_argument("-n", "--size", type=int, help="Size of random dataset to generate")
-    group_ex.add_argument("-p", "--points", nargs="*", type=str, help="List of points, formated [(x1,y1), (x2,y2), ...]")
+    group_ex.add_argument("-p", "--points", nargs="?", type=str, help="List of points, formated '(x1,y1), (x2,y2), ...'")
     group_ex.required = True
     parser.add_argument_group(group)
 
@@ -28,13 +31,7 @@ if __name__ == "__main__":
     if (args.size):
         points = generate_random_points_list(args.size)
     elif (args.points):
-        points = []
-        input = args.points
-        for index in range(0, len(input), 2):
-            x = float(input[index])
-            y = float(input[index+1])
-            point = Point(x, y)
-            points.append(point)
+        points = parse_points(args.points)
             
     if args.mode=='brute' or args.mode=='b':
         closest_pair_brute_driver(points, args.filename)

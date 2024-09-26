@@ -80,6 +80,29 @@ def generate_random_points_list(size: int) -> list[Point]:
         points.append(point)
     return points
 
+# Remove unwanted symbols from input string
+# This is primarily to allow various ordered-pair formatting styles
+#
+def clean_input(input: str) -> str:
+    clean = ""
+    clean_chars = ['0','1','2','3','4','5','6','7','8','9','.',',','-']
+    for c in input:
+        if c in clean_chars:
+            clean += c
+    return clean
+
+# Method for parsing points from a string
+def parse_points(input: str) -> list[Point]:
+    points = []
+    input = clean_input(input).split(",")
+    for index in range(0, len(input), 2):
+        x = float(input[index])
+        y = float(input[index+1])
+        point = Point(x, y)
+        points.append(point)
+    return points
+
+
 #
 # Generate data sets of each size for use in performance metrics
 # @param sizes list of sizes
@@ -105,14 +128,14 @@ class ClosePair:
         self.points = points
 
 # Generate a structure containing points and a closest pair
-# with a distance of min_dist if specified, else 0.5
-def generate_points_and_pair(n: int, min_dist=0.5) -> ClosePair:
+# with a distance of min_dist if specified, else 10
+def generate_points_and_pair(n: int, min_dist=10) -> ClosePair:
     points = []
     root = random.randint(1, n-2)
     next_point = generate_random_point()
     points.append(next_point)
     for index in range(1, root):
-        distance = min_dist + random.uniform(0.5, min_dist)
+        distance = min_dist + random.uniform(1, min_dist)
         next_point = generate_point_by_distance(distance, next_point)
         points.append(next_point)
 
@@ -122,7 +145,7 @@ def generate_points_and_pair(n: int, min_dist=0.5) -> ClosePair:
     pair = Pair(point, next_point, min_dist)
 
     for index in range(root+1, n):
-        distance = min_dist + random.uniform(0.5, min_dist)
+        distance = min_dist + random.uniform(1, min_dist)
         next_point = generate_point_by_distance(distance, next_point)
         points.append(next_point)
 

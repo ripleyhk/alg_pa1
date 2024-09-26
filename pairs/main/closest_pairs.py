@@ -162,7 +162,14 @@ def closest_pair_recursive(points: list[Point]) -> Pair:
         else:
             min_pair = pair_r
         points_b = get_bisecting_points(points, min_pair)
-        pair_b = closest_pair_recursive(points_b)
+
+        # Uncommon case where all points are near midpoint:
+        # Use brute force to prevent infinite loop
+        if (len(points_b) == len(points)):
+            pair_b = closest_pair_brute(points_b)
+        # Typical case: proceed recursively
+        else:
+            pair_b = closest_pair_recursive(points_b)
 
         if (pair_b.distance < min_pair.distance):
             min_pair = pair_b
@@ -171,15 +178,15 @@ def closest_pair_recursive(points: list[Point]) -> Pair:
 
 def closest_pair_recursive_driver(points: list[Point], filename="pairs.txt"):
     analysis.operations = 0
-    pair = closest_pair_recursive(points)
-    sorted_points = merge_sort(points, "x")
+    sorted_points = merge_sort(points)
+    pair = closest_pair_recursive(sorted_points)
     display_pair(sorted_points, pair, filename)
     return pair
 
 #
 # Get the list of points that surround the midpoint
 # i.e. closer than closest pair's distance
-# Points must exist on both sides of midpoint, else return empty list
+#
 # @param points Data Set containing the list of Points
 # @param closest_pair the current closest pair (and its distance)
 # @returns the list of points surrounding the midpoint (that may be part of a bisecting pair)
@@ -188,21 +195,18 @@ def get_bisecting_points(points: list[Point], closest_pair: Pair) -> list[Point]
     bisecting_points = []
     middle = len(points)//2
     midpoint = points[middle]
-
     for point in points:
-        analysis.operations+=1 
-        distance = calculate_distance(midpoint, point)
+        distance = abs(midpoint.x - point.x)
         if (distance < closest_pair.distance):
             bisecting_points.append(point)
-
+    
     return bisecting_points
 
 #
 # Implementation of the merge sort algorithm
-# @param points input list of points to sort
-# @param sort_on attribute to sort on, x if not specified
+# @param points input list of points to sort by x
 # @returns sorted list of points
-def merge_sort(points: list[Point], sort_on="x") -> list[Point]:
+def merge_sort(points: list[Point]) -> list[Point]:
     analysis.operations+=1
     if (len(points) < 2):
         return points
@@ -216,7 +220,7 @@ def merge_sort(points: list[Point], sort_on="x") -> list[Point]:
         analysis.operations+=1
         point_l = points_l[index_l]
         point_r = points_r[index_r]
-        if (point_l.__getattribute__(sort_on) < point_r.__getattribute__(sort_on)):
+        if (point_l.x < point_r.x):
             sorted.append(point_l)
             index_l+=1
         else:
@@ -224,10 +228,12 @@ def merge_sort(points: list[Point], sort_on="x") -> list[Point]:
             index_r+=1
     while (index_l < len(points_l)):
         analysis.operations+=1
+        point_l = points_l[index_l]
         sorted.append(point_l)
         index_l+=1
     while (index_r < len(points_r)):
         analysis.operations+=1
+        point_r = points_r[index_r]
         sorted.append(point_r)
         index_r+=1
     return sorted
