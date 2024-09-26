@@ -13,28 +13,6 @@ analysis = Analysis()
 def get_analysis():
     return analysis
         
-    
-# ---------- Utility Functions ----------
-'''
-# The following functions are used to determine the distance between two Points
-# It is used by the algorithm implementions for both Problems 1.b and 1.d
-#
-# Calculating the distance between two Points should conceptually be understood to be
-# a single discrete operation of running time O(1)
-#
-'''
-
-# Calculate the Euclidian distance sqrt((x2-x1)^2+(y2-y1)^2)
-# @param point1 first point, containing an x and y coordinate
-# @param point 2 second point, containing an x and y coordinate
-# @returns Euclidian distance between point1 and point2
-def calculate_distance(point1: Point, point2: Point) -> float:
-    delta_x2 = math.pow(point2.x - point1.x, 2)
-    delta_y2 = math.pow(point2.y - point1.y, 2)
-    distance = math.sqrt(delta_x2 + delta_y2)
-    return distance
-
-
 # ---------- Display Functions ----------
 '''
 # The following functions are used to display the result of a pairing algorithm,
@@ -191,6 +169,12 @@ def closest_pair_recursive(points: list[Point]) -> Pair:
     analysis.result = min_pair
     return min_pair
 
+def closest_pair_recursive_driver(points: list[Point], filename="pairs.txt"):
+    analysis.operations = 0
+    pair = closest_pair_recursive(points)
+    sorted_points = merge_sort(points, "x")
+    display_pair(sorted_points, pair, filename)
+    return pair
 
 #
 # Get the list of points that surround the midpoint
@@ -213,6 +197,11 @@ def get_bisecting_points(points: list[Point], closest_pair: Pair) -> list[Point]
 
     return bisecting_points
 
+#
+# Implementation of the merge sort algorithm
+# @param points input list of points to sort
+# @param sort_on attribute to sort on, x if not specified
+# @returns sorted list of points
 def merge_sort(points: list[Point], sort_on="x") -> list[Point]:
     analysis.operations+=1
     if (len(points) < 2):
@@ -242,10 +231,3 @@ def merge_sort(points: list[Point], sort_on="x") -> list[Point]:
         sorted.append(point_r)
         index_r+=1
     return sorted
-
-def closest_pair_recursive_driver(points: list[Point], filename="pairs.txt"):
-    analysis.operations = 0
-    pair = closest_pair_recursive(points)
-    sorted_points = merge_sort(points, "x")
-    display_pair(sorted_points, pair, filename)
-    return pair

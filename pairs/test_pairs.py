@@ -1,7 +1,7 @@
 import os, unittest
-from closest_pairs import *
-from generate_pairs import *
-
+from objects import Point, Pair
+from main import *
+from utils import *
 
 '''
 # Author: Hannah Ripley

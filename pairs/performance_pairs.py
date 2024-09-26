@@ -1,24 +1,13 @@
-from closest_pairs import *
-from generate_pairs import *
-import random
+import random, argparse
+from objects import Point, Pair
+from main import *
+from utils import *
 
 '''
 # Author: Hannah Ripley
 # Date: 09/30/2024
 # Description: Driver for evaluating performance of Closest Pairs implementations
 '''
-
-#
-# Generate data sets of each size for use in performance metrics
-# @param sizes list of sizes
-# @returns set of datasets of points
-#
-def generate_datasets(sizes: list[int]) -> list[list[Point]]:
-    datasets = []
-    for size in sizes:
-        dataset = generate_random_points_list(size)
-        datasets.append(dataset)
-    return datasets
 
 # 
 # Get the number of operations for running the brute force closest pair algorithm
@@ -56,14 +45,6 @@ def run_metrics_recursive(datasets: list[list[Point]]):
         closest_pair_recursive_analysis(dataset)
         clean_artifact("{0}_pairs.txt".format(len(dataset)))
 
-def get_default_datasets():
-    sizes = [10, 29, 30, 31, 100, 1000, 5000]
-    for index in range(10):
-        sizes.append(random.randint(2, 1000))
-    datasets = generate_datasets(sizes)
-    return datasets
-
-
 if __name__ == "__main__":
     parser=argparse.ArgumentParser(prog="Closest Pair Performance Test", description="Run performance metrics for the closest pair algorithms")
     parser.add_argument("-n", "--size", metavar="n",  nargs="*", type=int, help="Sizes of datasets to generate")
@@ -72,15 +53,15 @@ if __name__ == "__main__":
     args=parser.parse_args()
     
     if args.size:
-        datasets = generate_datasets(sizes)
+        datasets = generate_datasets(args.size)
     else:
         datasets = get_default_datasets()
 
-    if not args.b or args.r:
+    if not args.brute or args.recursive:
         run_metrics_brute(datasets)
         run_metrics_recursive(datasets)
  
-    if args.b:
+    if args.brute:
         run_metrics_brute(datasets)
-    if args.r:
+    if args.recursive:
         run_metrics_recursive(datasets)
