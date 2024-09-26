@@ -253,13 +253,7 @@ def closest_pair_recursive(points) -> Pair:
         else:
             min_pair = pair_r
         points_b = get_bisecting_points(points, min_pair)
-
-        # If all points bisect, do brute force to prevent infinite loop
-        if (len(points_b) == len(points)):
-            pair_b = closest_pair_brute(points_b)
-        # Otherwise, proceed using recursion
-        else:
-            pair_b = closest_pair_recursive(points_b)
+        pair_b = closest_pair_recursive(points_b)
 
         if (pair_b.distance < min_pair.distance):
             min_pair = pair_b
@@ -277,33 +271,16 @@ def closest_pair_recursive(points) -> Pair:
 #
 def get_bisecting_points(points: list[Point], closest_pair: Pair):   
     bisecting_points = []
-    bisect_left = False
-    bisect_right = False
-
     middle = len(points)//2
     midpoint = points[middle]
 
-    for point in points[:middle]:
+    for point in points:
         analysis.operations+=1 
-        midpoint.y = point.y
         distance = calculate_distance(midpoint, point)
         if (distance < closest_pair.distance):
             bisecting_points.append(point)
-            bisect_left = True
 
-    for point in points[middle:]: 
-        analysis.operations +=1
-        midpoint.y = point.y
-        distance = calculate_distance(midpoint, point)
-        if (distance < closest_pair.distance):
-            bisecting_points.append(point)
-            bisect_right = True
-
-    # Points must bisect the midpoint
-    if (not(bisect_left and bisect_right)):
-        return []
-    else:
-        return bisecting_points
+    return bisecting_points
 
 def merge_sort(points, sort_on="x") -> list[Point]:
     analysis.operations+=1
