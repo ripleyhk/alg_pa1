@@ -22,7 +22,7 @@ from generate_pairs import *
 # @param pair of closest two points
 # @param filename name of file to write result to
 # or by writing to a file
-def display_pair(points, pair, filename):
+def display_pair(points: list[Point], pair: Pair, filename: str):
     if (len(points) <= 30):
         print_pair(points, pair)
     else:
@@ -31,7 +31,7 @@ def display_pair(points, pair, filename):
 # Print closest pair to console
 # @param points list of all input points
 # @param pair of closest two points
-def print_pair(points, pair):
+def print_pair(points: list[Point], pair: Pair):
     print("For Data Set:")
     print("{}".format(points))
     pretty_distance = round(pair.distance, 2)
@@ -41,7 +41,7 @@ def print_pair(points, pair):
 # @param points list of all input points
 # @param pair of closest two points
 # @param filename name of file to write result to
-def write_pair(points, pair, filename):
+def write_pair(points: list[Point], pair: Pair, filename: str):
     f = open(filename, "w")
     f.write("For Data Set:\n")
     f.write("{}\n".format(points))
@@ -84,7 +84,7 @@ class Pair:
         self.point2 = point2
         self.distance = distance
 
-    def get_pair(self):
+    def get_pair(self) -> tuple(Point, Point):
         return (self.point1, self.point2)
 
     def __str__(self):
@@ -112,7 +112,7 @@ class Analysis:
         self.result = None
         self.operations = 0
 
-    def operations_str(self):
+    def operations_str(self) -> str:
         return "Total Operations={0}".format(self.operations)
 
     def __str__(self):
@@ -140,7 +140,7 @@ def get_analysis():
 # @param point1 first point, containing an x and y coordinate
 # @param point 2 second point, containing an x and y coordinate
 # @returns Euclidian distance between point1 and point2
-def calculate_distance(point1: Point, point2: Point):
+def calculate_distance(point1: Point, point2: Point) -> float:
     delta_x2 = math.pow(point2.x - point1.x, 2)
     delta_y2 = math.pow(point2.y - point1.y, 2)
     distance = math.sqrt(delta_x2 + delta_y2)
@@ -174,7 +174,7 @@ def calculate_distance(point1: Point, point2: Point):
 # Main function for calculating the closest pair of points using the brute force algorithm described above
 # @param points Data Set containing a list of Points
 # @returns the pair of closest two points and their distance
-def closest_pair_brute(points) -> Pair:
+def closest_pair_brute(points: list[Point]) -> Pair:
     min_pair = Pair()
     for index_i in range(len(points)):
         for index_j in range(len(points)):
@@ -195,7 +195,7 @@ def closest_pair_brute(points) -> Pair:
     return min_pair
 
 
-def closest_pair_brute_driver(points, filename="pair.txt") -> Pair:
+def closest_pair_brute_driver(points: list[Point], filename="pair.txt") -> Pair:
     analysis.operations = 0
     pair = closest_pair_brute(points)
     display_pair(points, pair, filename)
@@ -241,7 +241,7 @@ def closest_pair_brute_driver(points, filename="pair.txt") -> Pair:
 # Main function for calculating the closest pair of points using the recursive algorithm described above
 # @param points Data Set containing a list of Points
 # @returns the pair of closest two points and their distance
-def closest_pair_recursive(points) -> Pair:
+def closest_pair_recursive(points: list[Point]) -> Pair:
     analysis.operations+=1
     min_pair = Pair()
     if (len(points) <= 3):
@@ -273,7 +273,7 @@ def closest_pair_recursive(points) -> Pair:
 # @param closest_pair the current closest pair (and its distance)
 # @returns the list of points surrounding the midpoint (that may be part of a bisecting pair)
 #
-def get_bisecting_points(points: list[Point], closest_pair: Pair):   
+def get_bisecting_points(points: list[Point], closest_pair: Pair) -> list[Point]:   
     bisecting_points = []
     middle = len(points)//2
     midpoint = points[middle]
@@ -286,7 +286,7 @@ def get_bisecting_points(points: list[Point], closest_pair: Pair):
 
     return bisecting_points
 
-def merge_sort(points, sort_on="x") -> list[Point]:
+def merge_sort(points: list[Point], sort_on="x") -> list[Point]:
     analysis.operations+=1
     if (len(points) < 2):
         return points
@@ -316,7 +316,7 @@ def merge_sort(points, sort_on="x") -> list[Point]:
         index_r+=1
     return sorted
 
-def closest_pair_recursive_driver(points, filename="pairs.txt"):
+def closest_pair_recursive_driver(points: list[Point], filename="pairs.txt"):
     analysis.operations = 0
     pair = closest_pair_recursive(points)
     sorted_points = merge_sort(points, "x")

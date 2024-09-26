@@ -13,7 +13,7 @@ import random
 # @param sizes list of sizes
 # @returns set of datasets of points
 #
-def generate_datasets(sizes):
+def generate_datasets(sizes: list[int]) -> list[list[Point]]:
     datasets = []
     for size in sizes:
         dataset = generate_random_points_list(size)
@@ -24,7 +24,7 @@ def generate_datasets(sizes):
 # Get the number of operations for running the brute force closest pair algorithm
 # on a data set
 # @param dataset to run algorithm on
-def closest_pair_brute_analysis(dataset):
+def closest_pair_brute_analysis(dataset: list[Point]):
     n = len(dataset)
     closest_pair_brute_driver(dataset, "{0}_pairs.txt".format(n))
     analysis = get_analysis()
@@ -36,7 +36,7 @@ def closest_pair_brute_analysis(dataset):
 # Get the number of operations for running the recursive closest pair algorithm
 # on a data set
 # @param dataset to run algorithm on
-def closest_pair_recursive_analysis(dataset):
+def closest_pair_recursive_analysis(dataset: list[Point]):
     n = len(dataset)
     closest_pair_recursive_driver(dataset, "{0}_pairs.txt".format(n))
     analysis = get_analysis()
@@ -44,13 +44,13 @@ def closest_pair_recursive_analysis(dataset):
     print("For Data Set of size {0}, # of Operations= {1}".format(n, operations))
     analysis.reset()
 
-def run_metrics_brute(datasets):
+def run_metrics_brute(datasets: list[list[Point]]):
     print("Brute Force Performance:\n")
     for dataset in datasets:
         closest_pair_brute_analysis(dataset)
         clean_artifact("{0}_pairs.txt".format(len(dataset)))
 
-def run_metrics_recursive(datasets):
+def run_metrics_recursive(datasets: list[list[Point]]):
     print("\nRecursive Performance:\n")
     for dataset in datasets:
         closest_pair_recursive_analysis(dataset)
