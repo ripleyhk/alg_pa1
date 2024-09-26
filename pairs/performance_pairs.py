@@ -57,7 +57,7 @@ if __name__ == "__main__":
     else:
         datasets = get_default_datasets()
 
-    if not args.brute or args.recursive:
+    if not (args.brute or args.recursive):
         run_metrics_brute(datasets)
         run_metrics_recursive(datasets)
  
