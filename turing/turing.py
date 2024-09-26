@@ -1,3 +1,4 @@
+import argparse
 
 '''
 # Author: Hannah Ripley
@@ -22,6 +23,12 @@ class Analysis:
     def reset(self):
         self.result = None
         self.operations = 0
+
+    def operations_str(self):
+        return "Total Operations={0}".format(self.operations)
+
+    def space_str(self):
+        return "Tape Size={0}".format(self.space)    
 
     def __str__(self):
         return "{0}\nTotal Operations={1}".format(result, operations)
@@ -266,3 +273,16 @@ def turing_driver(input):
     analysis.result = result
     analysis.space = len(turing.tape)
     return result
+
+if __name__ == "__main__":
+    parser=argparse.ArgumentParser(prog="Unary Subtraction DTM", description="Subtract two unary numbers using a deterministic turing machine")
+    parser.add_argument("input", type=str, help="Tape input for DTM, formatted <some number of 1s>#<some number of 1s>")
+    parser.add_argument("-a", "--analytics", action="store_true", help="Show algorithm analytics")
+    args=parser.parse_args()
+    
+    result = turing_driver(args.input)
+    print(result)
+
+    if args.analytics:
+        print(analysis.operations_str())
+        print(analysis.space_str())
