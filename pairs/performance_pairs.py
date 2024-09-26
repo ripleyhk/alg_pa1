@@ -33,18 +33,17 @@ def closest_pair_recursive_n(n):
     analysis.reset()
 
 if __name__ == "__main__":
-    # sizes = [10, 29, 30, 31, 100, 1000, 5000]
-    # for index in range(10):
-    #     sizes.append(random.randint(2, 1000))
+    sizes = [10, 29, 30, 31, 100, 1000, 5000]
+    for index in range(10):
+        sizes.append(random.randint(2, 1000))
 
-    # print("Brute Force Performance:")
-    # for size in sizes:
-    #     closest_pair_brute_n(size)
-    #     clean_artifact("{0}_pairs.txt".format(size))
+    print("Brute Force Performance:\n")
+    for size in sizes:
+        closest_pair_brute_n(size)
+        clean_artifact("{0}_pairs.txt".format(size))
 
     size = 50
-    # print("Brute Force Performance:")
-    # closest_pair_brute_n(size)
-    print("Recursive Performance:")
-    closest_pair_recursive_n(size)
-    clean_artifact("{0}_pairs.txt".format(size))
+    print("\nRecursive Performance:\n")
+    for size in sizes:
+        closest_pair_recursive_n(size)
+        clean_artifact("{0}_pairs.txt".format(size))
