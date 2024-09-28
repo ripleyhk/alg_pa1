@@ -33,12 +33,20 @@ def closest_pair_recursive_analysis(dataset: list[Point]):
     print("For Data Set of size {0}, # of Operations= {1}".format(n, operations))
     analysis.reset()
 
+#
+# Run brute force metrics for a set of datasets
+# @param datasets to perform metrics on
+#
 def run_metrics_brute(datasets: list[list[Point]]):
     print("Brute Force Performance:")
     for dataset in datasets:
         closest_pair_brute_analysis(dataset)
         clean_artifact("{0}_pairs.txt".format(len(dataset)))
 
+#
+# Run recursive metrics for a set of datasets
+# @param datasets to perform metrics on
+#
 def run_metrics_recursive(datasets: list[list[Point]]):
     print("\nRecursive Performance:")
     for dataset in datasets:

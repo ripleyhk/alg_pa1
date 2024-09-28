@@ -101,6 +101,11 @@ def closest_pair_brute(points: list[Point]) -> Pair:
     analysis.result = min_pair
     return min_pair
 
+# 
+# Entry point / driver for the closest pair brute function
+# @param points Data Set containing a list of Points
+# @param filename an optional filename to write results to
+# @returns the pair of closest two points and their distance
 def closest_pair_brute_driver(points: list[Point], filename="pair.txt") -> Pair:
     analysis.operations = 0
     pair = closest_pair_brute(points)
@@ -163,6 +168,11 @@ def closest_pair_recursive(points: list[Point]) -> Pair:
             min_pair = pair_r
         points_b = get_bisecting_points(points, min_pair)
 
+        # Skip running closest pair if the list is empty
+        if (len(points_b) == 0):
+            analysis.result = min_pair
+            return min_pair
+        
         # Uncommon case where all points are near midpoint:
         # Use brute force to prevent infinite loop
         if (len(points_b) == len(points)):
@@ -176,6 +186,11 @@ def closest_pair_recursive(points: list[Point]) -> Pair:
     analysis.result = min_pair
     return min_pair
 
+# 
+# Entry point / driver for the closest pair recursive function
+# @param points Data Set containing a list of Points
+# @param filename an optional filename to write results to
+# @returns the pair of closest two points and their distance
 def closest_pair_recursive_driver(points: list[Point], filename="pairs.txt"):
     analysis.operations = 0
     sorted_points = merge_sort(points)
@@ -196,6 +211,7 @@ def get_bisecting_points(points: list[Point], closest_pair: Pair) -> list[Point]
     middle = len(points)//2
     midpoint = points[middle]
     for point in points:
+        analysis.operations+=1
         distance = abs(midpoint.x - point.x)
         if (distance < closest_pair.distance):
             bisecting_points.append(point)
@@ -228,10 +244,12 @@ def merge_sort(points: list[Point]) -> list[Point]:
             index_r+=1
     while (index_l < len(points_l)):
         analysis.operations+=1
+        analysis.operations+=1
         point_l = points_l[index_l]
         sorted.append(point_l)
         index_l+=1
     while (index_r < len(points_r)):
+        analysis.operations+=1
         analysis.operations+=1
         point_r = points_r[index_r]
         sorted.append(point_r)

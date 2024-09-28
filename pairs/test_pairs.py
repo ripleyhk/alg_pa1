@@ -11,37 +11,37 @@ from utils import *
 
 class UnitTests(unittest.TestCase):
     
-    # # Test that display_pair writes len(point) > 30 to file
-    # def test_write_pair(self):
-    #     size = 31
-    #     filename = "testpair.txt"
-    #     points = generate_random_points_list(size)
-    #     pair = generate_random_pair()
-    #     try:
-    #         display_pair(points, pair, filename)
-    #     except Exception as e:
-    #         self.fail(str(e))
+    # Test that display_pair writes len(point) > 30 to file
+    def test_write_pair(self):
+        size = 31
+        filename = "testpair.txt"
+        points = generate_random_points_list(size)
+        pair = generate_random_pair()
+        try:
+            display_pair(points, pair, filename)
+        except Exception as e:
+            self.fail(str(e))
 
-    #     file_exists = os.path.isfile(filename)
-    #     clean_artifact(filename)
-    #     self.assertTrue(file_exists)
+        file_exists = os.path.isfile(filename)
+        clean_artifact(filename)
+        self.assertTrue(file_exists)
 
 
-    # # Test that display_pair does not write len(point]) <= 30 to file
-    # def test_print_pair(self):
-    #     size = 30
-    #     filename = "testpair.txt"
-    #     points = generate_random_points_list(size)
-    #     pair = generate_random_pair()
-    #     clean_artifact(filename)
+    # Test that display_pair does not write len(point]) <= 30 to file
+    def test_print_pair(self):
+        size = 30
+        filename = "testpair.txt"
+        points = generate_random_points_list(size)
+        pair = generate_random_pair()
+        clean_artifact(filename)
 
-    #     try:
-    #         display_pair(points, pair, filename)    
-    #     except Exception as e:
-    #         self.fail(str(e))
+        try:
+            display_pair(points, pair, filename)    
+        except Exception as e:
+            self.fail(str(e))
 
-    #     file_exists = os.path.isfile(filename)
-    #     self.assertFalse(file_exists)
+        file_exists = os.path.isfile(filename)
+        self.assertFalse(file_exists)
 
     # Test the utility function for calculating distance between Points
     def test_distance(self):

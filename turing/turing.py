@@ -31,10 +31,10 @@ class Analysis:
         return "Tape Size={0}".format(self.space)    
 
     def __str__(self):
-        return "{0}\nTotal Operations={1}".format(result, operations)
+        return "{0}\nTotal Operations={1}".format(result, self.operations)
 
     def __repr__(self):
-        return "{0}\nTotal Operations={1}".format(result, operations)
+        return "{0}\nTotal Operations={1}".format(result, self.operations)
 
 analysis = Analysis()
 def get_analysis():
@@ -58,18 +58,27 @@ STAY = 0
 #
 '''
 class State:
-    def __init__ (self, name, state_type = NORMAL, rules = {}):
+    def __init__ (self, name: str, state_type = NORMAL, rules = {}):
         self.name = name
         self.state_type = state_type
         self.rules = rules
 
-    def get_rule(self, input):
+    # Get a transition rule from the state on a particular input
+    # @param input value of cell at head
+    # @returns rule for input, if one exists, else None
+    def get_rule(self, input: str):
         if (input in self.rules):
             rule = self.rules[input]
         else:
             rule = None
         return rule        
-        
+
+    #
+    # Add a transition rule to the state's ruleset
+    # @param input value for cell at head
+    # @param direction to move head
+    # @param next_state to transition to
+    # @param symbol to write over the current cell    
     def add_rule(self, input, direction, next_state, symbol):
         self.rules[input] = Rule(direction, next_state, symbol)
 
@@ -117,6 +126,7 @@ class Turing:
         return self.tape[self.head_index]
     
     # Update the tape head with the symbol from the transition rule
+    # @param symbol to update cell at head with
     def update_head(self, symbol):
         self.tape[self.head_index] = symbol
     
@@ -133,15 +143,23 @@ class Turing:
             self.tape.insert(0, '#')
             self.head_index = 0
 
-    def is_halted(self):
+    # Check if the machine is halted
+    def is_halted(self) -> bool:
         return (self.curr_state.state_type == ACCEPT 
              or self.curr_state.state_type == REJECT)
 
+    # Add a state to the turing machine
+    # @param name of state
+    # @param state type, either start, accept, reject, or normale
+    # @param rules associated with state
     def add_state(self, name, state_type=NORMAL, rules=None):
         state = State(name, state_type, rules)
         self.states[name] = state
 
     # Add a list of states, optionally also their types and transition rules
+    # @param names of states to add
+    # @param state_types for each state, in matching order
+    # @param rules for each state, in matching order
     def add_states_from_list(self, names, state_types=None, rules=None):
         for index in range(0, len(names)):
             name = names[index]
@@ -149,16 +167,25 @@ class Turing:
             rule = rules[index] if rules else {}
             self.add_state(name, state_type, rule)
     
+    # Add a rule to a state in the machine
+    # @param input value at head for transition
+    # @param state to add rule to
+    # @param direction to move head on transition
+    # @param next_state to transition to
+    # @param symbol to write at current cell
     def add_rule(self, input, state, direction, next_state, symbol):
         if (state in self.states):
             self.states[state].add_rule(input, direction, next_state, symbol)
 
     # Add a rule, formated as [state name, input, +1/0/-1 direction, next state, symbol]
+    # @param rule to add to state
     def add_rule_from_list(self, rule):
         state = self.states[rule[0]]
         next_state = self.states[rule[3]]
         state.add_rule(rule[1], rule[2], next_state, rule[4])
     
+    # Add a list of rules
+    # @param list of rules to add to states
     def add_rules_from_list(self, rules):
         for rule in rules:
             self.add_rule_from_list(rule)

@@ -13,7 +13,7 @@ class UnitTests(unittest.TestCase):
             self.assertEqual(e, head)
             turing.move_forward()
 
-    def test_move_backware(self):
+    def test_move_backward(self):
         tape = list("FEDCBA")
         expected = "ABCDEF##"
         turing = Turing(tape, 0)

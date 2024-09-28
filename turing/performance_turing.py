@@ -9,9 +9,10 @@ import random
 
 #
 # Generate a random unary subtraction tape for two operands
-# totaling in a length of n
+# @param n total length of input, including both operands and dividing '#'
+# @returns a valid input string for unary subtraction
 #
-def generate_subtraction_n(n):
+def generate_subtraction_n(n) -> str:
     tape = ""
     midpoint = random.randint(1, n-1)
     for i in range(midpoint):
@@ -26,7 +27,7 @@ def generate_subtraction_n(n):
 # @param sizes list of sizes
 # @returns set of datasets of unary subtraction strings
 #
-def generate_datasets(sizes):
+def generate_datasets(sizes) -> list[str]:
     datasets = []
     for size in sizes:
         dataset = generate_subtraction_n(size)
@@ -35,7 +36,7 @@ def generate_datasets(sizes):
 
 # 
 # Get the number of operations for running the turing algorithm
-# @params n
+# @params input string comprising a unary subtraction
 def turing_analysis(input):
     n = len(input)
     result = turing_driver(input)
@@ -45,6 +46,7 @@ def turing_analysis(input):
     print("For Data Set of size {0}, # of Operations= {1}, # of Cells= {2}".format(n, operations, space))
     analyis.reset()
 
+# Run analytics using the default dataset sizes
 def run_default_metrics():
     sizes = [10, 29, 30, 31, 100, 1000, 5000]
     for index in range(10):
