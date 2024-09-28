@@ -1,5 +1,4 @@
-import argparse, math, ast
-from objects import Point
+import argparse
 from main import *
 from utils import generate_random_points_list
 

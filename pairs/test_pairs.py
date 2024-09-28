@@ -1,5 +1,5 @@
 import os, unittest
-from objects import Point, Pair
+from objects import Point
 from main import *
 from utils import *
 

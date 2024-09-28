@@ -1,5 +1,5 @@
-import random, argparse
-from objects import Point, Pair
+import argparse
+from objects import Point
 from main import *
 from utils import *
 
